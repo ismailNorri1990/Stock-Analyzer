@@ -29,7 +29,16 @@ namespace StockAnalyzer.Windows
             StockProgress.IsIndeterminate = true;
             #endregion
 
-            //We must Use HTTP-Client Instead of WebClient
+            await GetStocks();
+
+            #region After stock data is loaded
+            StocksStatus.Text = $"Loaded stocks for {Ticker.Text} in {watch.ElapsedMilliseconds}ms";
+            StockProgress.Visibility = Visibility.Hidden;
+            #endregion
+        }
+
+        public async Task GetStocks()
+        {
             using (var client = new HttpClient())
             {
 
@@ -51,11 +60,6 @@ namespace StockAnalyzer.Windows
                     Notes.Text += ex.Message;
                 }
             }
-
-            #region After stock data is loaded
-            StocksStatus.Text = $"Loaded stocks for {Ticker.Text} in {watch.ElapsedMilliseconds}ms";
-            StockProgress.Visibility = Visibility.Hidden;
-            #endregion
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
