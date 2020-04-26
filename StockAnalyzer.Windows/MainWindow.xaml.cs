@@ -20,6 +20,8 @@ namespace StockAnalyzer.Windows
 
         private async void Search_Click(object sender, RoutedEventArgs e)
         {
+            //We add the Async keyword
+
             #region Before loading stock data
             var watch = new Stopwatch();
             watch.Start();
@@ -27,17 +29,20 @@ namespace StockAnalyzer.Windows
             StockProgress.IsIndeterminate = true;
             #endregion
 
-            using (var client = new HttpClient()) { 
+            //We must Use HTTP-Client Instead of WebClient
+            using (var client = new HttpClient())
+            {
 
-            var response = await client.GetAsync($"http://localhost:61363/api/stocks/{Ticker.Text}");
+                //We add the Await keyword and The method GetAsync
+                var response = await client.GetAsync($"http://localhost:61363/api/stocks/{Ticker.Text}");
 
                 //Using Await -Not call the result
-            var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync();
 
-            var data = JsonConvert.DeserializeObject<IEnumerable<StockPrice>>(content);
+                var data = JsonConvert.DeserializeObject<IEnumerable<StockPrice>>(content);
 
-            Stocks.ItemsSource = data;
-            
+                Stocks.ItemsSource = data;
+
             }
 
             #region After stock data is loaded
