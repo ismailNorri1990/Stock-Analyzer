@@ -28,8 +28,18 @@ namespace StockAnalyzer.Windows
             StockProgress.Visibility = Visibility.Visible;
             StockProgress.IsIndeterminate = true;
             #endregion
+           
+            //Handling Exception to improve user experience
 
-            await GetStocks();
+            try
+            {
+                await GetStocks();
+            }
+            catch (Exception ex)
+            {
+                Notes.Text += ex.Message;
+            }
+
 
             #region After stock data is loaded
             StocksStatus.Text = $"Loaded stocks for {Ticker.Text} in {watch.ElapsedMilliseconds}ms";
